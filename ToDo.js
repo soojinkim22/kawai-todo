@@ -33,7 +33,9 @@ export default class ToDo extends Component {
                     </TouchableOpacity>
                     {isEditing ? (
                         <TextInput 
-                            style={[styles.input, styles.text,
+                            style={[
+                                styles.text, 
+                                styles.input,
                                 isCompleted ? styles.completedText : styles.uncompletedText]} 
                             value={todoValue}
                             multiline={true} 
@@ -152,7 +154,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     input: {
-        marginVertical:15,
         width: width / 2,
+        marginVertical:10,
+        paddingBottom: 5,
     }
 });

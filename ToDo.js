@@ -7,19 +7,29 @@ import {
     Dimensions,
     TextInput
 } from "react-native";
+import PropTypes from 'prop-types';
 
 const { height, width } = Dimensions.get("window");
 
 export default class ToDo extends Component {
-    state = {
-        isEditing: false,
-        isCompleted: false,
-        todoValue: ""
+    constructor(props) {
+        super(props);
+        this.state = {
+            isEditing: false,
+            todoValue: props.text
+        }
+    }
+
+    static propTypes = {
+        text: PropTypes.string.isRequired,
+        isCompleted: PropTypes.bool.isRequired,
+        deleteToDo: PropTypes.func.isRequired,
+        id: PropTypes.string.isRequired
     }
 
     render() {
         const { isCompleted, isEditing, todoValue } = this.state;
-        const { text } = this.props;
+        const { text, id, deleteToDo } = this.props;
         return (
             <View style={styles.container}>
                 <View style={styles.column}>
@@ -66,7 +76,7 @@ export default class ToDo extends Component {
                                 <Text style={styles.actionText}>✏️</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPressOut={()=> deleteToDo(id)}>
                             <View style={styles.actionContainer}>
                                 <Text style={styles.actionText}>❌</Text>
                             </View>
@@ -86,10 +96,8 @@ export default class ToDo extends Component {
     };
 
     _startEditing = () => {
-        const { text } = this.props;
         this.setState({
-            isEditing: true,
-            todoValue: text
+            isEditing: true
         });
     };
 
@@ -103,7 +111,7 @@ export default class ToDo extends Component {
         this.setState({
             todoValue: text
         })
-    }
+    };
 }
 
 const styles = StyleSheet.create({
@@ -143,8 +151,7 @@ const styles = StyleSheet.create({
     column: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: width / 2,
-        justifyContent: "space-between"
+        width: width / 2
     },
     actions: {
         flexDirection: 'row',
